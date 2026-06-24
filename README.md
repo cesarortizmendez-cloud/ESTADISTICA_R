@@ -1,7 +1,9 @@
 # EstadísticaR · Terminal Estadístico
 
+> Proyecto desarrollado por **César Ortiz Méndez** — [cv-cesarortiz.vercel.app](https://cv-cesarortiz.vercel.app)
+
 Webapp educativa en **Django** para aprender **estadística con R**, directamente en el navegador.
-Cada uno de los **11 capítulos** del curso *Estadística y Probabilidades 14256* (cátedra César Ortiz)
+Cada uno de los **11 capítulos** del curso *Estadística y Probabilidades 14256*
 es una app Django con su propia **consola de R real, funcional**, capaz de **cargar Excel** y
 **exportar a Excel**. Incluye dos módulos extra: **Data Frames & Minería de datos** y un
 **Transformador automático de CSV → tablas de frecuencia**.
@@ -37,8 +39,8 @@ Necesitas **Python 3.10+** instalado.
 
 ```cmd
 :: 1. Clonar el repositorio
-git clone https://github.com/TU_USUARIO/estadistica_r.git
-cd estadistica_r
+git clone https://github.com/cesarortizmendez-cloud/ESTADISTICA_R.git
+cd ESTADISTICA_R
 
 :: 2. Crear y activar el entorno virtual
 python -m venv venv
@@ -71,7 +73,7 @@ Para editar: abre la carpeta en **VS Code** (`code .`).
    git add .
    git commit -m "EstadísticaR inicial"
    git branch -M main
-   git remote add origin https://github.com/TU_USUARIO/estadistica_r.git
+   git remote add origin https://github.com/cesarortizmendez-cloud/ESTADISTICA_R.git
    git push -u origin main
    ```
 
@@ -136,4 +138,10 @@ estadistica_r/
   pero no es necesario y puede complicar la carga de CDNs.
 - No se persiste ningún dato del alumno: los archivos cargados viven solo en memoria del navegador.
 
-Cátedra **14256 — César Ortiz**.
+## Autor
+
+**César Ortiz Méndez**
+Portafolio: [cv-cesarortiz.vercel.app](https://cv-cesarortiz.vercel.app)
+
+Material y desarrollo del curso de Estadística y Probabilidades **14256**.
+Este proyecto —código, diseño y contenido— es obra de César Ortiz Méndez.

@@ -2,6 +2,7 @@
    rengine.js — Motor R real en el navegador (WebR / WebAssembly)
    + consolas educativas + carga/descarga Excel (SheetJS)
    Sin servidor R: todo corre en la máquina del alumno.
+   Autor: César Ortiz Méndez · https://cv-cesarortiz.vercel.app
    ============================================================ */
 import { WebR } from 'https://webr.r-wasm.org/latest/webr.mjs';
 

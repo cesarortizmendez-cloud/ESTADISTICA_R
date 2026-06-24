@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}EstadísticaR{% endblock %} · Terminal Estadístico</title>
   <meta name="description" content="Aprende estadística y R en el navegador. R real (WebR), carga y exporta Excel, sin instalar nada.">
+  <meta name="author" content="César Ortiz Méndez">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{% static 'core/css/app.css' %}">
@@ -14,10 +15,10 @@
 <body>
 
 <div class="statusbar">
-  <button class="btn menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+  <button class="btn menu-toggle" onclick="toggleSidebar()" aria-label="Abrir menú">☰</button>
   <span class="brand">estadística<b>R</b></span>
   <span class="sep">·</span>
-  <span style="color:var(--muted)">terminal_estadistico</span>
+  <span class="term-label" style="color:var(--muted)">terminal_estadistico</span>
   <span class="engine">
     <span id="engine-dot" class="dot"></span>
     <span id="engine-status">iniciando…</span>
@@ -44,6 +45,7 @@
       <a href="{% url 'cheatsheet' %}" class="{% if active == 'cheatsheet' %}on{% endif %}"><span class="num">?</span> referencia R</a>
     </nav>
   </aside>
+  <div class="sidebar-backdrop" onclick="toggleSidebar()"></div>
 
   <main class="main {% block mainclass %}{% endblock %}">
     {% block content %}{% endblock %}
@@ -51,11 +53,25 @@
 </div>
 
 <footer class="foot">
-  EstadísticaR · R real con <a href="https://webr.r-wasm.org/" target="_blank" rel="noopener">WebR</a> (WebAssembly) ·
-  sin servidor, sin base de datos, libre acceso · cátedra 14256 — César Ortiz
+  <div class="foot-row">
+    <span>EstadísticaR · R real con <a href="https://webr.r-wasm.org/" target="_blank" rel="noopener">WebR</a> (WebAssembly) · sin servidor, sin base de datos, libre acceso · curso 14256</span>
+    <span class="credit">
+      Desarrollado por <b>César Ortiz Méndez</b> ·
+      <a href="https://cv-cesarortiz.vercel.app" target="_blank" rel="noopener">cv-cesarortiz.vercel.app</a>
+    </span>
+  </div>
 </footer>
 
 <script type="module" src="{% static 'core/js/rengine.js' %}"></script>
+<script>
+  function toggleSidebar(){
+    document.body.classList.toggle('nav-open');
+  }
+  // Al tocar un enlace del menú en móvil, cerrar la barra
+  document.querySelectorAll('.sidebar .tree a').forEach(function(a){
+    a.addEventListener('click', function(){ document.body.classList.remove('nav-open'); });
+  });
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
