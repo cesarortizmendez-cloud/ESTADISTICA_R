@@ -1,9 +1,9 @@
 # EstadísticaR · Terminal Estadístico
 
-> Proyecto desarrollado por **César Ortiz Méndez** — [cv-cesarortiz.vercel.app](https://cv-cesarortiz.vercel.app)
+> **Software abierto de aprendizaje de estadística con R**, creado por el **Dr. César Ortiz Méndez** — [cv-cesarortiz.vercel.app](https://cv-cesarortiz.vercel.app)
 
 Webapp educativa en **Django** para aprender **estadística con R**, directamente en el navegador.
-Cada uno de los **11 capítulos** del curso *Estadística y Probabilidades 14256*
+Cada una de las **11 lecciones**
 es una app Django con su propia **consola de R real, funcional**, capaz de **cargar Excel** y
 **exportar a Excel**. Incluye dos módulos extra: **Data Frames & Minería de datos** y un
 **Transformador automático de CSV → tablas de frecuencia**.
@@ -21,13 +21,13 @@ es una app Django con su propia **consola de R real, funcional**, capaz de **car
 | Ruta | Módulo |
 |------|--------|
 | `/` | Inicio |
-| `/cap/01/` … `/cap/11/` | Los 11 capítulos del curso |
+| `/cap/01/` … `/cap/11/` | Las 11 lecciones |
 | `/dataframes/` | Data Frames & Minería de datos (extra) |
 | `/transformador/` | Transformador CSV → tablas (extra) |
 | `/consola/` | Consola R libre |
 | `/ayuda-r/` | Hoja de referencia R |
 
-Capítulos: 1) Conceptos · 2) Tablas de frecuencia (Sturges) · 3) Gráficos · 4) Posición ·
+Lecciones: 1) Conceptos · 2) Tablas de frecuencia (Sturges) · 3) Gráficos · 4) Posición ·
 5) Dispersión/asimetría/curtosis · 6) Bivariado y regresión · 7) Probabilidades ·
 8) Condicional y Bayes · 9) V.A. discretas · 10) V.A. continuas · 11) Intervalos de confianza.
 
@@ -138,10 +138,12 @@ estadistica_r/
   pero no es necesario y puede complicar la carga de CDNs.
 - No se persiste ningún dato del alumno: los archivos cargados viven solo en memoria del navegador.
 
-## Autor
+## Autor y licencia de uso
 
-**César Ortiz Méndez**
+Creado por el **Dr. César Ortiz Méndez**
 Portafolio: [cv-cesarortiz.vercel.app](https://cv-cesarortiz.vercel.app)
 
-Material y desarrollo del curso de Estadística y Probabilidades **14256**.
-Este proyecto —código, diseño y contenido— es obra de César Ortiz Méndez.
+**EstadísticaR** es un software abierto de aprendizaje de estadística con R: libre para
+estudiar, usar y compartir con fines educativos. El código, el diseño y el contenido
+pedagógico son obra del Dr. César Ortiz Méndez. Si lo reutilizas o adaptas, por favor
+mantén la atribución a su autor.

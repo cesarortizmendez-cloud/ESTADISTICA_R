@@ -35,10 +35,10 @@
 
 <div class="pager">
   {% if ch.num > 1 %}
-    <a href="/cap/{{ ch.num|add:'-1'|stringformat:'02d' }}/">← apunte anterior</a>
-  {% else %}<span class="dis">← inicio del curso</span>{% endif %}
+    <a href="/cap/{{ ch.num|add:'-1'|stringformat:'02d' }}/">← lección anterior</a>
+  {% else %}<span class="dis">← inicio</span>{% endif %}
   {% if ch.num < 11 %}
-    <a href="/cap/{{ ch.num|add:'1'|stringformat:'02d' }}/">apunte siguiente →</a>
+    <a href="/cap/{{ ch.num|add:'1'|stringformat:'02d' }}/">lección siguiente →</a>
   {% else %}
     <a href="{% url 'dataframes:index' %}">extra: data frames y minería →</a>
   {% endif %}

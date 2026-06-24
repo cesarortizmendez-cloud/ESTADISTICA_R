@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}EstadísticaR{% endblock %} · Terminal Estadístico</title>
   <meta name="description" content="Aprende estadística y R en el navegador. R real (WebR), carga y exporta Excel, sin instalar nada.">
-  <meta name="author" content="César Ortiz Méndez">
+  <meta name="author" content="Dr. César Ortiz Méndez">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="{% static 'core/css/app.css' %}">
@@ -27,7 +27,7 @@
 
 <div class="shell">
   <aside class="sidebar">
-    <div class="tree-title">// apuntes_14256</div>
+    <div class="tree-title">// lecciones</div>
     <nav class="tree">
       <a href="{% url 'home' %}" class="{% if active == 'home' %}on{% endif %}"><span class="num">~</span> inicio</a>
       {% for c in chapters %}
@@ -54,9 +54,9 @@
 
 <footer class="foot">
   <div class="foot-row">
-    <span>EstadísticaR · R real con <a href="https://webr.r-wasm.org/" target="_blank" rel="noopener">WebR</a> (WebAssembly) · sin servidor, sin base de datos, libre acceso · curso 14256</span>
+    <span>EstadísticaR · software abierto de aprendizaje de estadística con R · R real con <a href="https://webr.r-wasm.org/" target="_blank" rel="noopener">WebR</a> (WebAssembly) · sin servidor, sin base de datos, libre acceso</span>
     <span class="credit">
-      Desarrollado por <b>César Ortiz Méndez</b> ·
+      Creado por el <b>Dr. César Ortiz Méndez</b> ·
       <a href="https://cv-cesarortiz.vercel.app" target="_blank" rel="noopener">cv-cesarortiz.vercel.app</a>
     </span>
   </div>

@@ -35,7 +35,7 @@ DATAFRAMES = {
     "intro": """
 <p>Un <b>data frame</b> es la estructura más importante de R: una <b>tabla</b> donde cada
 <b>columna</b> es una variable (un vector) y cada <b>fila</b> es una observación. Es,
-literalmente, una hoja Excel viviendo dentro de R. Todo el curso —frecuencias, gráficos,
+literalmente, una hoja Excel viviendo dentro de R. Todo el análisis de datos —frecuencias, gráficos,
 correlación, modelos— opera sobre data frames.</p>
 <p>La <b>minería de datos</b> es el proceso de descubrir patrones útiles en grandes volúmenes
 de datos: limpieza, exploración, agrupación, detección de atípicos y modelos predictivos.
@@ -88,7 +88,7 @@ Aquí verás los primeros pasos con herramientas base de R.</p>
             "id": "clustering",
             "title": "8 · Agrupamiento con k-means (minería)",
             "explain": "k-means descubre grupos naturales sin etiquetas. Aquí, 3 clusters sobre iris.",
-            "code": 'data(iris)\nset.seed(14256)\nX <- iris[, c("Petal.Length","Petal.Width")]\nkm <- kmeans(X, centers = 3)\nplot(X, col = c("#00ff9c","#22d3ee","#ff2e97")[km$cluster],\n     pch = 19, main = "k-means sobre iris (3 grupos)",\n     xlab = "Largo del petalo", ylab = "Ancho del petalo")\npoints(km$centers, pch = 8, cex = 2, lwd = 2)\ntable(cluster = km$cluster, especie = iris$Species)',
+            "code": 'data(iris)\nset.seed(2024)\nX <- iris[, c("Petal.Length","Petal.Width")]\nkm <- kmeans(X, centers = 3)\nplot(X, col = c("#00ff9c","#22d3ee","#ff2e97")[km$cluster],\n     pch = 19, main = "k-means sobre iris (3 grupos)",\n     xlab = "Largo del petalo", ylab = "Ancho del petalo")\npoints(km$centers, pch = 8, cex = 2, lwd = 2)\ntable(cluster = km$cluster, especie = iris$Species)',
         },
     ],
     "exercises": [

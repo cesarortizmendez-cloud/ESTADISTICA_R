@@ -15,10 +15,10 @@ CHAPTERS_A = [
     {
         "num": 1,
         "slug": "conceptos",
-        "code": "apunte_01",
+        "code": "leccion_01",
         "title": "Conceptos de Estadística",
         "subtitle": "Población, muestra, variables y método científico",
-        "apunte": "Apunte 1 · Introducción a la Cátedra",
+        "apunte": "Lección 1 · Introducción a la estadística",
         "concepts": [
             ("Población", "Conjunto de TODAS las mediciones posibles de los individuos u objetos de interés que comparten una característica observable."),
             ("Muestra", "Subconjunto de datos recolectados de la población durante la investigación."),
@@ -71,7 +71,7 @@ Clasificar mal una variable hace que R aplique el análisis equivocado.</p>
             {
                 "title": "Población vs muestra (simulación)",
                 "explain": "Creamos una población de 100.000 sueldos y extraemos una muestra de 50 con <code>sample()</code>. Observa cómo la media muestral se aproxima al parámetro.",
-                "code": 'set.seed(14256)\npoblacion <- round(rnorm(100000, mean = 850, sd = 120))\nmu <- mean(poblacion)            # parametro\nmuestra <- sample(poblacion, 50)  # muestra\nxbar <- mean(muestra)            # estadigrafo\ncat("Parametro mu  =", round(mu,2), "\\n")\ncat("Estadigrafo x =", round(xbar,2), "\\n")',
+                "code": 'set.seed(2024)\npoblacion <- round(rnorm(100000, mean = 850, sd = 120))\nmu <- mean(poblacion)            # parametro\nmuestra <- sample(poblacion, 50)  # muestra\nxbar <- mean(muestra)            # estadigrafo\ncat("Parametro mu  =", round(mu,2), "\\n")\ncat("Estadigrafo x =", round(xbar,2), "\\n")',
             },
         ],
         "dataset": "iris",
@@ -86,10 +86,10 @@ Clasificar mal una variable hace que R aplique el análisis equivocado.</p>
     {
         "num": 2,
         "slug": "frecuencias",
-        "code": "apunte_02",
+        "code": "leccion_02",
         "title": "Tablas de Frecuencia",
         "subtitle": "Datos agrupados, regla de Sturges y frecuencias",
-        "apunte": "Apunte 2 · Tablas de distribución de frecuencias",
+        "apunte": "Lección 2 · Tablas de distribución de frecuencias",
         "concepts": [
             ("Datos no agrupados", "Registro crudo, sin orden ni clasificación."),
             ("Datos agrupados", "Datos organizados en clases o categorías."),
@@ -144,10 +144,10 @@ a mano (para entender) y de forma automática (para producir).</p>
     {
         "num": 3,
         "slug": "graficos",
-        "code": "apunte_03",
+        "code": "leccion_03",
         "title": "Representación Gráfica",
         "subtitle": "Barras, histograma, torta, boxplot y ojiva",
-        "apunte": "Apunte 3 · Estadística descriptiva, gráficos",
+        "apunte": "Lección 3 · Estadística descriptiva, gráficos",
         "concepts": [
             ("Gráfico de barras", "Rectángulos separados para variables cualitativas/discretas."),
             ("Histograma", "Rectángulos contiguos para variables continuas agrupadas."),
@@ -205,10 +205,10 @@ aparecerá en el panel de la derecha de la consola.</p>
     {
         "num": 4,
         "slug": "posicion",
-        "code": "apunte_04",
+        "code": "leccion_04",
         "title": "Estadígrafos de Posición",
         "subtitle": "Media, mediana, moda, cuartiles y percentiles",
-        "apunte": "Apunte 4 · Estadígrafos de posición",
+        "apunte": "Lección 4 · Estadígrafos de posición",
         "concepts": [
             ("Media aritmética", "Promedio: x̄ = Σxi / n. Es el centro de equilibrio."),
             ("Mediana", "Valor central que deja 50% bajo y 50% sobre él. Resistente a atípicos."),
@@ -263,10 +263,10 @@ hay asimetría a la derecha (cola de valores altos).</p>
     {
         "num": 5,
         "slug": "dispersion",
-        "code": "apunte_05",
+        "code": "leccion_05",
         "title": "Dispersión, Asimetría y Curtosis",
         "subtitle": "Rango, varianza, desviación, CV y forma",
-        "apunte": "Apunte 5 · Estadígrafos de dispersión, asimetría y curtosis",
+        "apunte": "Lección 5 · Estadígrafos de dispersión, asimetría y curtosis",
         "concepts": [
             ("Rango", "R = máximo − mínimo. Sensible a atípicos."),
             ("Varianza (s²)", "Promedio de las desviaciones al cuadrado respecto a la media."),
@@ -302,7 +302,7 @@ hay asimetría a la derecha (cola de valores altos).</p>
             },
             {
                 "title": "Asimetría y curtosis (sin paquetes)",
-                "explain": "Las definimos a mano con los momentos, tal como en el apunte.",
+                "explain": "Las definimos a mano con los momentos, tal como en la teoría.",
                 "code": 'asimetria <- function(x){\n  n <- length(x); m <- mean(x); s <- sd(x)\n  sum((x-m)^3)/n / s^3\n}\ncurtosis <- function(x){\n  n <- length(x); m <- mean(x); s <- sd(x)\n  sum((x-m)^4)/n / s^4\n}\nset.seed(5); d <- rexp(500)        # exponencial: cola derecha\ncat("Asimetria:", round(asimetria(d),3), "\\n")\ncat("Curtosis :", round(curtosis(d),3), "\\n")',
             },
             {
@@ -323,10 +323,10 @@ hay asimetría a la derecha (cola de valores altos).</p>
     {
         "num": 6,
         "slug": "bivariados",
-        "code": "apunte_06",
+        "code": "leccion_06",
         "title": "Datos Bivariados",
         "subtitle": "Covarianza, correlación y regresión lineal",
-        "apunte": "Apunte 6 · Datos bivariados",
+        "apunte": "Lección 6 · Datos bivariados",
         "concepts": [
             ("Datos bivariados", "Se registran DOS variables por individuo para ver si se relacionan."),
             ("Covarianza (Sxy)", "Variabilidad conjunta. >0 relación directa, <0 inversa."),

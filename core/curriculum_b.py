@@ -6,10 +6,10 @@ CHAPTERS_B = [
     {
         "num": 7,
         "slug": "probabilidades",
-        "code": "apunte_07",
+        "code": "leccion_07",
         "title": "Probabilidades",
         "subtitle": "Espacios muestrales, eventos y axiomas",
-        "apunte": "Apunte 7 · Probabilidades",
+        "apunte": "Lección 7 · Probabilidades",
         "concepts": [
             ("Experimento aleatorio", "Produce resultados distintos aunque se repita igual."),
             ("Espacio muestral (Ω)", "Conjunto de TODOS los resultados posibles."),
@@ -37,7 +37,7 @@ probabilidad teórica. También calcula combinatoria con <code>choose()</code> y
             {
                 "title": "Simular el lanzamiento de un dado",
                 "explain": "Simulamos 10.000 lanzamientos y comparamos con la probabilidad teórica 1/6.",
-                "code": 'set.seed(14256)\ndado <- sample(1:6, 10000, replace = TRUE)\ntable(dado)\nprop.table(table(dado))   # se acercan a 0.1667',
+                "code": 'set.seed(2024)\ndado <- sample(1:6, 10000, replace = TRUE)\ntable(dado)\nprop.table(table(dado))   # se acercan a 0.1667',
             },
             {
                 "title": "Regla de Laplace: suma de dos dados",
@@ -67,10 +67,10 @@ probabilidad teórica. También calcula combinatoria con <code>choose()</code> y
     {
         "num": 8,
         "slug": "condicional",
-        "code": "apunte_08",
+        "code": "leccion_08",
         "title": "Probabilidad Condicional",
         "subtitle": "Teorema de la probabilidad total y de Bayes",
-        "apunte": "Apunte 8 · Probabilidad condicional",
+        "apunte": "Lección 8 · Probabilidad condicional",
         "concepts": [
             ("Probabilidad condicional", "P(A|B) = P(A∩B) / P(B), con P(B) ≠ 0."),
             ("Independencia", "A y B son independientes si P(A|B) = P(A)."),
@@ -126,10 +126,10 @@ resultados (a veces contraintuitivos) de Bayes.</p>
     {
         "num": 9,
         "slug": "va-discretas",
-        "code": "apunte_09",
+        "code": "leccion_09",
         "title": "Variables Aleatorias Discretas",
         "subtitle": "Función de cuantía, binomial y Poisson",
-        "apunte": "Apunte 9 · Variables aleatorias discretas",
+        "apunte": "Lección 9 · Variables aleatorias discretas",
         "concepts": [
             ("Variable aleatoria", "Función que asigna un número a cada resultado del experimento."),
             ("Función de cuantía", "P(X = x): probabilidad de cada valor. Suma 1."),
@@ -148,7 +148,7 @@ se describe con la <b>función de cuantía</b> P(X = x).</p>
   <li><code>q…</code> → cuantil (inversa)</li>
   <li><code>r…</code> → genera datos aleatorios</li>
 </ul>
-<p>Las dos estrella del apunte son <b>Binomial</b> (<code>dbinom</code>) y <b>Poisson</b>
+<p>Las dos estrellas de esta lección son <b>Binomial</b> (<code>dbinom</code>) y <b>Poisson</b>
 (<code>dpois</code>).</p>
 """,
         "examples": [
@@ -185,10 +185,10 @@ se describe con la <b>función de cuantía</b> P(X = x).</p>
     {
         "num": 10,
         "slug": "va-continuas",
-        "code": "apunte_10",
+        "code": "leccion_10",
         "title": "Variables Aleatorias Continuas",
         "subtitle": "Densidad, distribución normal y exponencial",
-        "apunte": "Apunte 10 · Variables aleatorias continuas",
+        "apunte": "Lección 10 · Variables aleatorias continuas",
         "concepts": [
             ("Función de densidad f(x)", "Curva cuya área bajo ella vale 1. La probabilidad es área."),
             ("P(a ≤ X ≤ b)", "Área bajo f(x) entre a y b. P(X = x) = 0 en continuas."),
@@ -208,7 +208,7 @@ función de densidad f(x). Por eso P(X = x) = 0 y solo tienen sentido los interv
   <li><code>rnorm(n, μ, σ)</code> → genera datos normales.</li>
 </ul>
 <p>La <b>estandarización</b> Z convierte cualquier normal en N(0,1), lo que conecta con la
-tabla Z clásica del curso.</p>
+tabla Z clásica de la estadística.</p>
 """,
         "examples": [
             {
@@ -244,10 +244,10 @@ tabla Z clásica del curso.</p>
     {
         "num": 11,
         "slug": "intervalos",
-        "code": "apunte_11",
+        "code": "leccion_11",
         "title": "Intervalos de Confianza",
         "subtitle": "Estimación de la media y la varianza",
-        "apunte": "Apunte 11 · Intervalos de confianza",
+        "apunte": "Lección 11 · Intervalos de confianza",
         "concepts": [
             ("Inferencia estadística", "Generalizar de la muestra a la población."),
             ("Estimador insesgado", "Su valor esperado coincide con el parámetro (x̄ estima μ)."),

@@ -3,25 +3,26 @@
 
 {% block content %}
 <section class="hero">
-  <div class="eyebrow">cátedra 14256 · estadística y probabilidades</div>
+  <div class="eyebrow">software abierto · estadística con R</div>
   <h1>Aprende estadística<br>ejecutando <span class="g">R de verdad</span>.</h1>
-  <p class="lead">Once apuntes, una consola de R real en el navegador, carga y exporta Excel.
+  <p class="lead">Once lecciones, una consola de R real en el navegador, carga y exporta Excel.
   Sin instalar nada, sin cuentas, sin servidores. Solo tú, los datos y el lenguaje
   estadístico más usado del mundo.</p>
 
   <div class="boot" id="boot"></div>
 
   <p class="byline">
-    Un proyecto de <a href="https://cv-cesarortiz.vercel.app" target="_blank" rel="noopener"><b>César Ortiz Méndez</b></a>
-    para el curso de Estadística y Probabilidades 14256.
+    Software abierto de aprendizaje creado por el
+    <a href="https://cv-cesarortiz.vercel.app" target="_blank" rel="noopener"><b>Dr. César Ortiz Méndez</b></a>.
+    Libre para estudiar, usar y compartir.
   </p>
 </section>
 
-<div class="section-h"><span class="bar"></span><h2>Apuntes del curso</h2></div>
+<div class="section-h"><span class="bar"></span><h2>Lecciones</h2></div>
 <div class="cards">
   {% for c in chapters %}
   <a class="card" href="/cap/{{ c.num|stringformat:'02d' }}/">
-    <div class="k">apunte_{{ c.num|stringformat:'02d' }}.R</div>
+    <div class="k">leccion_{{ c.num|stringformat:'02d' }}.R</div>
     <div class="ttl">{{ c.title }}</div>
     <div class="sub">{{ c.subtitle }}</div>
   </a>
@@ -54,10 +55,10 @@ const lines = [
   {t:"$ ", c:"booting estadisticaR ...", cls:"c"},
   {t:"[ok] ", c:"motor WebR cargado · R 4.6.0 (wasm32)", cls:""},
   {t:"[ok] ", c:"SheetJS listo · import/export .xlsx", cls:""},
-  {t:"[ok] ", c:"11 apuntes + 2 modulos extra montados", cls:""},
-  {t:"R> ", c:"cat('Hola, futura/o ingeniera/o industrial')", cls:"c"},
-  {t:"", c:"Hola, futura/o ingeniera/o industrial", cls:"m"},
-  {t:"R> ", c:"# elige un apunte en la barra lateral para comenzar_", cls:"c"},
+  {t:"[ok] ", c:"11 lecciones + 2 modulos extra montados", cls:""},
+  {t:"R> ", c:"cat('Bienvenida/o a EstadisticaR')", cls:"c"},
+  {t:"", c:"Bienvenida/o a EstadisticaR", cls:"m"},
+  {t:"R> ", c:"# elige una leccion en la barra lateral para comenzar_", cls:"c"},
 ];
 const boot = document.getElementById('boot');
 let li = 0, ci = 0, buf = "";
