@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% block title %}Transformador CSV → Tablas{% endblock %}
+
+{% block content %}
+<div class="eyebrow">// herramienta / automatización</div>
+<h1 class="page">[⇄] <span class="hl">Transformador CSV → Tablas</span></h1>
+<div class="subtitle">Sube un archivo y obtén, en un clic, su tabla de frecuencias lista para Excel.</div>
+
+<p class="note">Carga un <code>.csv</code> o <code>.xlsx</code>. El proceso lo lee como un
+<b>data frame</b> de R, lo describe y construye <b>automáticamente</b> una tabla de frecuencias.
+Si la columna elegida es <b>numérica</b>, aplica la <b>regla de Sturges</b>
+(<code>K = 1 + 3.3·log₁₀(n)</code>) y arma intervalos; si es <b>categórica</b>, cuenta cada categoría.
+Todo corre con R real en tu navegador.</p>
+
+<div class="rconsole" id="tx">
+  <div class="bar">
+    <span class="lamps"><i></i><i></i><i></i></span>
+    <span class="fname" id="tx-fname">sin_archivo.csv</span>
+    <span class="actions">
+      <input type="file" id="tx-file" accept=".csv,.xlsx,.xls">
+      <button class="btn" id="tx-load">⬑ cargar archivo</button>
+      <button class="btn run" id="tx-build" disabled>▸ generar tabla</button>
+      <button class="btn" id="tx-export" disabled>⬐ exportar excel</button>
+    </span>
+  </div>
+
+  <div class="iobar">
+    <span class="lbl">archivo:</span>
+    <span class="filechip" id="tx-chip">aún no cargas nada · arrastra o usa «cargar archivo»</span>
+  </div>
+
+  <div class="iobar" id="tx-controls" style="display:none">
+    <span class="lbl">columna:</span>
+    <select id="tx-col" class="btn" style="min-width:180px"></select>
+    <span class="lbl" style="margin-left:14px">tipo:</span>
+    <span class="pill" id="tx-type">—</span>
+  </div>
+
+  <div class="output-wrap">
+    <div class="out-head">salida // R&gt;</div>
+    <pre class="output" id="tx-out"><span class="m" style="color:#5d7186">Carga un archivo para comenzar…</span></pre>
+  </div>
+
+  <div class="tablewrap" id="tx-tablewrap" style="display:none">
+    <div class="out-head">tabla de frecuencias generada</div>
+    <div id="tx-table"></div>
+  </div>
+
+  <div class="plotbox" id="tx-plotbox"><div class="empty">El histograma/diagrama de barras aparecerá aquí.</div></div>
+</div>
+
+<div class="exercises">
+  <h3>▸ Cómo funciona por dentro</h3>
+  <ol>
+    <li>El archivo se lee con SheetJS y se escribe en el sistema de archivos de R como CSV.</li>
+    <li>R lo importa con <code>read.csv()</code> a un data frame llamado <code>tabla</code>.</li>
+    <li>Para columnas numéricas: número de clases con <b>Sturges</b>, <code>cut()</code> para los intervalos y <code>table()</code> para contar.</li>
+    <li>Se calculan frecuencia absoluta, relativa, porcentual y acumuladas en un data frame <code>frecuencias</code>, exportable a Excel.</li>
+  </ol>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+let DATA_LOADED = false;
+let COLS = [];
+
+const $ = (id) => document.getElementById(id);
+const out   = $('tx-out');
+const chip  = $('tx-chip');
+const fileI = $('tx-file');
+const selCol= $('tx-col');
+const typeP = $('tx-type');
+
+function log(text, isErr) {
+  out.innerHTML = '';
+  const span = document.createElement('span');
+  if (isErr) span.className = 'err';
+  span.textContent = text;
+  out.appendChild(span);
+}
+function appendResult(result) {
+  out.innerHTML = '';
+  if (result.error) {
+    const s = document.createElement('span'); s.className='err';
+    s.textContent = 'Error: ' + result.error + '\n'; out.appendChild(s);
+  }
+  for (const it of result.text) {
+    const s = document.createElement('span');
+    if (it.stream === 'stderr') s.className = 'err';
+    s.textContent = it.line + '\n'; out.appendChild(s);
+  }
+}
+function drawPlots(images) {
+  const box = $('tx-plotbox');
+  if (!images || !images.length) {
+    box.innerHTML = '<div class="empty">Sin gráfico para esta columna.</div>'; return;
+  }
+  box.innerHTML = '';
+  for (const img of images) {
+    const c = document.createElement('canvas');
+    c.width = img.width; c.height = img.height;
+    c.getContext('2d').drawImage(img, 0, 0);
+    box.appendChild(c);
+  }
+}
+
+/* --- Cargar archivo: Excel/CSV -> CSV -> data.frame `tabla` --- */
+async function loadFile() {
+  const f = fileI.files && fileI.files[0];
+  if (!f) { alert('Primero elige un archivo .csv o .xlsx'); return; }
+  $('tx-fname').textContent = f.name;
+  chip.textContent = 'leyendo «' + f.name + '»…';
+  log('Iniciando R y leyendo el archivo… (la primera vez descarga el motor WebR)');
+
+  try {
+    const buf = await f.arrayBuffer();
+    const wb  = XLSX.read(buf, { type: 'array' });
+    const ws  = wb.Sheets[wb.SheetNames[0]];
+    const csv = XLSX.utils.sheet_to_csv(ws);
+
+    const R = await window.__bootR();
+    await R.FS.writeFile('/tmp/entrada.csv', new TextEncoder().encode(csv));
+
+    const res = await window.__runR(
+      'tabla <- read.csv("/tmp/entrada.csv", stringsAsFactors = TRUE, check.names = TRUE)\n' +
+      'cat("Dimensiones:", nrow(tabla), "filas x", ncol(tabla), "columnas\\n\\n")\n' +
+      'cat("Estructura del data frame:\\n"); str(tabla)\n' +
+      'cat("\\nPrimeras filas:\\n"); print(head(tabla))\n' +
+      'cat("\\nColumnas:::", paste(names(tabla), collapse="|"), ":::\\n")\n' +
+      'cat("Tipos:::", paste(sapply(tabla, function(c) if (is.numeric(c)) "num" else "cat"), collapse="|"), ":::\\n")'
+    );
+    appendResult(res);
+
+    const joined = res.text.map(t => t.line).join('\n');
+    const mCols = joined.match(/Columnas:::(.*?):::/);
+    const mTyp  = joined.match(/Tipos:::(.*?):::/);
+    COLS = mCols ? mCols[1].split('|').map(s => s.trim()).filter(Boolean) : [];
+    const TYPES = mTyp ? mTyp[1].split('|').map(s => s.trim()) : [];
+
+    selCol.innerHTML = '';
+    COLS.forEach((c, i) => {
+      const o = document.createElement('option');
+      o.value = c; o.textContent = c + '  (' + (TYPES[i] === 'num' ? 'numérica' : 'categórica') + ')';
+      o.dataset.type = TYPES[i] || 'cat';
+      selCol.appendChild(o);
+    });
+    updateType();
+
+    DATA_LOADED = true;
+    $('tx-build').disabled = false;
+    $('tx-controls').style.display = '';
+    chip.textContent = f.name + ' · ' + COLS.length + ' columnas detectadas · data.frame `tabla`';
+  } catch (e) {
+    log('No se pudo cargar: ' + (e && e.message ? e.message : e), true);
+    chip.textContent = 'error al cargar';
+  }
+}
+
+function updateType() {
+  const opt = selCol.selectedOptions[0];
+  const t = opt ? opt.dataset.type : 'cat';
+  typeP.textContent = t === 'num' ? 'numérica → Sturges' : 'categórica → conteo';
+}
+selCol.addEventListener('change', updateType);
+
+/* --- Generar tabla de frecuencias automáticamente --- */
+async function buildTable() {
+  if (!DATA_LOADED) return;
+  const col = selCol.value;
+  const isNum = selCol.selectedOptions[0].dataset.type === 'num';
+  chip.textContent = 'generando tabla de frecuencias para «' + col + '»…';
+
+  const rcode = isNum ? `
+v <- tabla[["${col}"]]; v <- v[!is.na(v)]
+n <- length(v)
+k <- ceiling(1 + 3.3 * log10(n))            # regla de Sturges
+cortes <- pretty(v, n = k)
+clases <- cut(v, breaks = cortes, include.lowest = TRUE, right = FALSE)
+fi <- as.integer(table(clases))
+mc <- (head(cortes,-1) + tail(cortes,-1)) / 2
+frecuencias <- data.frame(
+  Intervalo = levels(clases),
+  Marca = round(mc, 2),
+  Fi = fi,
+  Fr = round(fi / n, 4),
+  Pct = round(100 * fi / n, 2),
+  Fi_acum = cumsum(fi),
+  Pct_acum = round(100 * cumsum(fi) / n, 2)
+)
+cat("Variable numerica: '${col}'  |  n =", n, " |  K(Sturges) =", k, "\\n\\n")
+print(frecuencias)
+hist(v, breaks = cortes, col = "#00ff9c", border = "#0b0f14",
+     main = "Histograma de ${col}", xlab = "${col}")
+cat("\\n:::JSON:::"); cat(jsonlite_like(frecuencias)); cat(":::END:::")
+` : `
+v <- as.character(tabla[["${col}"]]); v <- v[!is.na(v)]
+n <- length(v)
+tb <- sort(table(v), decreasing = TRUE)
+fi <- as.integer(tb)
+frecuencias <- data.frame(
+  Categoria = names(tb),
+  Fi = fi,
+  Fr = round(fi / n, 4),
+  Pct = round(100 * fi / n, 2),
+  Fi_acum = cumsum(fi),
+  Pct_acum = round(100 * cumsum(fi) / n, 2)
+)
+cat("Variable categorica: '${col}'  |  n =", n, " |  categorias =", nrow(frecuencias), "\\n\\n")
+print(frecuencias)
+barplot(fi, names.arg = names(tb), col = "#2bd9ff", border = "#0b0f14",
+        las = 2, main = "Frecuencia de ${col}")
+cat("\\n:::JSON:::"); cat(jsonlite_like(frecuencias)); cat(":::END:::")
+`;
+
+  // helper en R para serializar el data.frame sin depender de jsonlite
+  const helper = `
+jsonlite_like <- function(df){
+  cols <- names(df)
+  rows <- apply(df, 1, function(r){
+    vals <- mapply(function(x){
+      x <- as.character(x)
+      paste0('"', gsub('"','\\\\"', x), '"')
+    }, r)
+    paste0("[", paste(vals, collapse=","), "]")
+  })
+  paste0('{"cols":[', paste(paste0('"',cols,'"'), collapse=","),
+         '],"rows":[', paste(rows, collapse=","), ']}')
+}
+`;
+
+  try {
+    const res = await window.__runR(helper + rcode);
+    appendResult(res);
+    drawPlots(res.images);
+
+    const joined = res.text.map(t => t.line).join('');
+    const m = joined.match(/:::JSON:::([\s\S]*?):::END:::/);
+    if (m) renderTable(JSON.parse(m[1]));
+    $('tx-export').disabled = false;
+    chip.textContent = 'tabla lista · objeto R `frecuencias` · puedes exportar a Excel';
+  } catch (e) {
+    log('Error generando la tabla: ' + (e && e.message ? e.message : e), true);
+  }
+}
+
+function renderTable(obj) {
+  const wrap = $('tx-tablewrap');
+  const host = $('tx-table');
+  let html = '<table class="dtable"><thead><tr>';
+  obj.cols.forEach(c => html += '<th>' + c + '</th>');
+  html += '</tr></thead><tbody>';
+  obj.rows.forEach(r => {
+    html += '<tr>';
+    r.forEach(v => html += '<td>' + v + '</td>');
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  host.innerHTML = html;
+  wrap.style.display = '';
+}
+
+/* --- Exportar `frecuencias` a Excel --- */
+async function exportXlsx() {
+  try {
+    const res = await window.__runR(
+      'write.csv(frecuencias, "/tmp/frecuencias.csv", row.names = FALSE)\ncat("ok")'
+    );
+    const R = await window.__bootR();
+    const bytes = await R.FS.readFile('/tmp/frecuencias.csv');
+    const csv = new TextDecoder().decode(bytes);
+    const wb = XLSX.read(csv, { type: 'string' });
+    XLSX.writeFile(wb, 'tabla_frecuencias.xlsx');
+  } catch (e) {
+    alert('No se pudo exportar: ' + (e && e.message ? e.message : e));
+  }
+}
+
+$('tx-load').addEventListener('click', loadFile);
+$('tx-build').addEventListener('click', buildTable);
+$('tx-export').addEventListener('click', exportXlsx);
+
+// arrastrar y soltar
+const zone = $('tx');
+['dragover','dragenter'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.style.outline = '1px dashed var(--phosphor)'; }));
+['dragleave','drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.style.outline = 'none'; }));
+zone.addEventListener('drop', e => {
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) { fileI.files = e.dataTransfer.files; loadFile(); }
+});
+</script>
+{% endblock %}

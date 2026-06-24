@@ -1,0 +1,43 @@
+{% comment %}
+Consola R reutilizable.
+Parámetros (include ... with):
+  code   -> código R inicial (string)
+  fname  -> nombre de archivo mostrado en la barra
+  io     -> True para mostrar botones de Excel (cargar/exportar)
+  split  -> True para layout editor | salida lado a lado
+{% endcomment %}
+<div class="rconsole">
+  <div class="bar">
+    <span class="lamps"><i></i><i></i><i></i></span>
+    <span class="fname">{{ fname|default:'script.R' }}</span>
+    <span class="actions">
+      {% if io %}
+      <input type="file" accept=".xlsx,.xls,.csv">
+      <button class="btn" data-act="loadxlsx" title="Cargar Excel/CSV como data.frame `datos`">⬑ cargar excel</button>
+      <button class="btn" data-act="savexlsx" title="Exportar un data.frame a Excel">⬐ exportar excel</button>
+      {% endif %}
+      <button class="btn" data-act="reset" title="Restaurar código original">↺</button>
+      <button class="btn warn" data-act="clear" title="Limpiar salida">limpiar</button>
+      <button class="btn run" data-act="run" title="Ejecutar (Ctrl+Enter)">▸ ejecutar</button>
+    </span>
+  </div>
+
+  {% if io %}
+  <div class="iobar">
+    <span class="lbl">datos:</span>
+    <span class="filechip">aún no cargas un archivo · usa el botón «cargar excel» o trabaja con datasets de R</span>
+  </div>
+  {% endif %}
+
+  <div class="rgrid {% if split %}split{% endif %}">
+    <div class="editor">
+      <textarea spellcheck="false">{{ code }}</textarea>
+    </div>
+    <div class="output-wrap">
+      <div class="out-head">salida // R&gt;</div>
+      <pre class="output"></pre>
+    </div>
+  </div>
+
+  <div class="plotbox"><div class="empty">El gráfico aparecerá aquí al usar plot(), hist(), barplot()…</div></div>
+</div>

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}{{ ch.num|stringformat:'02d' }} · {{ ch.title }}{% endblock %}
+
+{% block content %}
+<div class="eyebrow">{{ ch.apunte }}</div>
+<h1 class="page">[{{ ch.num|stringformat:'02d' }}] <span class="hl">{{ ch.title }}</span></h1>
+<div class="subtitle">{{ ch.subtitle }}</div>
+
+<div class="section-h"><span class="bar"></span><h2>Teoría</h2></div>
+<div class="prose">{{ ch.theory|safe }}</div>
+
+<div class="section-h"><span class="bar"></span><h2>Conceptos clave</h2></div>
+<div class="concepts">
+  {% for t, d in ch.concepts %}
+  <div class="concept"><div class="t">{{ t }}</div><div class="d">{{ d }}</div></div>
+  {% endfor %}
+</div>
+
+<div class="section-h"><span class="bar"></span><h2>Práctica en R · ejecuta y experimenta</h2></div>
+<p class="note">Cada bloque corre <b>R real</b> en tu navegador. Edita el código y presiona
+<b>Ctrl + Enter</b> o «ejecutar». El dataset <code>{{ ch.dataset }}</code> de R está disponible para que sigas explorando.</p>
+
+{% for ex in ch.examples %}
+<div class="example">
+  <div class="head"><span class="n">{{ forloop.counter|stringformat:'02d' }}</span><span class="ttl">{{ ex.title }}</span></div>
+  <div class="explain">{{ ex.explain|safe }}</div>
+  {% include 'core/_console.html' with code=ex.code fname=ch.code|add:'.R' split=True io=forloop.last %}
+</div>
+{% endfor %}
+
+<div class="exercises">
+  <h3>▸ Ejercicios propuestos</h3>
+  <ol>{% for e in ch.exercises %}<li>{{ e|safe }}</li>{% endfor %}</ol>
+</div>
+
+<div class="pager">
+  {% if ch.num > 1 %}
+    <a href="/cap/{{ ch.num|add:'-1'|stringformat:'02d' }}/">← apunte anterior</a>
+  {% else %}<span class="dis">← inicio del curso</span>{% endif %}
+  {% if ch.num < 11 %}
+    <a href="/cap/{{ ch.num|add:'1'|stringformat:'02d' }}/">apunte siguiente →</a>
+  {% else %}
+    <a href="{% url 'dataframes:index' %}">extra: data frames y minería →</a>
+  {% endif %}
+</div>
+{% endblock %}

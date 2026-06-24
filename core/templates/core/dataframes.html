@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}{{ df.title }}{% endblock %}
+
+{% block content %}
+<div class="eyebrow">// módulo extra / minería de datos</div>
+<h1 class="page">[DF] <span class="hl">{{ df.title }}</span></h1>
+<div class="subtitle">{{ df.subtitle }}</div>
+
+<div class="section-h"><span class="bar"></span><h2>¿Qué es un data frame?</h2></div>
+<div class="prose">{{ df.intro|safe }}</div>
+
+<div class="section-h"><span class="bar"></span><h2>Laboratorio · ejecuta cada bloque</h2></div>
+<p class="note">Estas son las operaciones fundamentales de la <b>ciencia de datos</b>: crear tablas,
+filtrar, transformar, agrupar, limpiar y descubrir patrones. Todo corre con <b>R real</b>.
+Edita y presiona <b>Ctrl + Enter</b>.</p>
+
+{% for b in df.blocks %}
+<div class="example">
+  <div class="head"><span class="n">{{ forloop.counter|stringformat:'02d' }}</span><span class="ttl">{{ b.title }}</span></div>
+  <div class="explain">{{ b.explain|safe }}</div>
+  {% include 'core/_console.html' with code=b.code fname='df_'|add:b.id|add:'.R' split=True io=forloop.last %}
+</div>
+{% endfor %}
+
+<div class="exercises">
+  <h3>▸ Ejercicios de minería</h3>
+  <ol>{% for e in df.exercises %}<li>{{ e|safe }}</li>{% endfor %}</ol>
+</div>
+
+<div class="pager">
+  <a href="/cap/11/">← volver a intervalos de confianza</a>
+  <a href="{% url 'transformador:index' %}">herramienta: csv → tablas →</a>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Consola R libre{% endblock %}
+
+{% block content %}
+<div class="eyebrow">// herramientas / repl</div>
+<h1 class="page">[R&gt;] <span class="hl">Consola R libre</span></h1>
+<div class="subtitle">Un entorno de R completo en tu navegador. Sin instalar nada, sin servidor.</div>
+
+<p class="note">Esto es <b>R real</b> (motor WebR sobre WebAssembly). Escribe tu código y presiona
+<b>Ctrl + Enter</b> o «ejecutar». Puedes <b>cargar un Excel/CSV</b> —quedará disponible como el
+data.frame <code>datos</code>— y <b>exportar</b> cualquier data.frame a Excel. Los datasets clásicos
+de R (<code>iris</code>, <code>mtcars</code>, <code>airquality</code>…) ya están cargados.</p>
+
+{% include 'core/_console.html' with code=seed fname='consola.R' io=True split=True %}
+
+<div class="exercises">
+  <h3>▸ Para empezar</h3>
+  <ol>
+    <li>Ejecuta <code>summary(mtcars)</code> para ver un resumen estadístico completo.</li>
+    <li>Grafica con <code>hist(iris$Sepal.Length, col="#00ff9c")</code>.</li>
+    <li>Carga tu propio Excel con «cargar excel» y explóralo con <code>str(datos)</code> y <code>summary(datos)</code>.</li>
+    <li>Crea un objeto y expórtalo: <code>res &lt;- aggregate(mpg ~ cyl, mtcars, mean)</code>, luego «exportar excel».</li>
+  </ol>
+</div>
+{% endblock %}

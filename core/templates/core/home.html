@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}EstadísticaR · Aprende estadística con R{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="eyebrow">cátedra 14256 · estadística y probabilidades</div>
+  <h1>Aprende estadística<br>ejecutando <span class="g">R de verdad</span>.</h1>
+  <p class="lead">Once apuntes, una consola de R real en el navegador, carga y exporta Excel.
+  Sin instalar nada, sin cuentas, sin servidores. Solo tú, los datos y el lenguaje
+  estadístico más usado del mundo.</p>
+
+  <div class="boot" id="boot"></div>
+</section>
+
+<div class="section-h"><span class="bar"></span><h2>Apuntes del curso</h2></div>
+<div class="cards">
+  {% for c in chapters %}
+  <a class="card" href="/cap/{{ c.num|stringformat:'02d' }}/">
+    <div class="k">apunte_{{ c.num|stringformat:'02d' }}.R</div>
+    <div class="ttl">{{ c.title }}</div>
+    <div class="sub">{{ c.subtitle }}</div>
+  </a>
+  {% endfor %}
+</div>
+
+<div class="section-h"><span class="bar"></span><h2>Módulos extra</h2></div>
+<div class="cards">
+  <a class="card ext" href="{% url 'dataframes:index' %}">
+    <div class="k">data_frames.R</div>
+    <div class="ttl">Data Frames &amp; Minería de Datos</div>
+    <div class="sub">La tabla como objeto, limpieza, agrupación, atípicos y k-means.</div>
+  </a>
+  <a class="card ext" href="{% url 'transformador:index' %}">
+    <div class="k">csv_to_table.R</div>
+    <div class="ttl">Transformador CSV → Tablas</div>
+    <div class="sub">Convierte automáticamente un CSV/Excel en data.frame y tabla de frecuencias.</div>
+  </a>
+  <a class="card" href="{% url 'console' %}">
+    <div class="k">consola.R</div>
+    <div class="ttl">Consola libre</div>
+    <div class="sub">Un REPL de R en blanco para practicar lo que quieras.</div>
+  </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const lines = [
+  {t:"$ ", c:"booting estadisticaR ...", cls:"c"},
+  {t:"[ok] ", c:"motor WebR cargado · R 4.6.0 (wasm32)", cls:""},
+  {t:"[ok] ", c:"SheetJS listo · import/export .xlsx", cls:""},
+  {t:"[ok] ", c:"11 apuntes + 2 modulos extra montados", cls:""},
+  {t:"R> ", c:"cat('Hola, futura/o ingeniera/o industrial')", cls:"c"},
+  {t:"", c:"Hola, futura/o ingeniera/o industrial", cls:"m"},
+  {t:"R> ", c:"# elige un apunte en la barra lateral para comenzar_", cls:"c"},
+];
+const boot = document.getElementById('boot');
+let li = 0, ci = 0, buf = "";
+function type(){
+  if (li >= lines.length){ boot.innerHTML += '<span class="cursor"></span>'; return; }
+  const ln = lines[li];
+  if (ci === 0){ buf += '<span class="l"><span style="color:var(--phosphor)">'+ln.t+'</span><span class="'+ln.cls+'">'; }
+  if (ci < ln.c.length){
+    buf += ln.c[ci]; ci++;
+    boot.innerHTML = buf + '</span></span>';
+    setTimeout(type, 14 + Math.random()*22);
+  } else {
+    buf += '</span></span>'; li++; ci=0;
+    setTimeout(type, 230);
+  }
+}
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches){ type(); }
+else { boot.innerHTML = lines.map(l=>'<span class="l"><span style="color:var(--phosphor)">'+l.t+'</span><span class="'+l.cls+'">'+l.c+'</span></span>').join(''); }
+</script>
+{% endblock %}

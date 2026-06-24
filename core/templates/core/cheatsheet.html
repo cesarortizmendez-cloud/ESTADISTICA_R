@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Referencia R{% endblock %}
+
+{% block content %}
+<div class="eyebrow">// herramientas / referencia</div>
+<h1 class="page">[?] <span class="hl">Hoja de referencia R</span></h1>
+<div class="subtitle">Las funciones que usarás en todo el curso, en un solo lugar.</div>
+
+<p class="note">¿No recuerdas una función? Abre la <a href="{% url 'console' %}">consola libre</a> y pruébala.
+En R, <code>?nombre</code> abre la ayuda (ej. <code>?mean</code>).</p>
+
+{% for grupo in grupos %}
+<div class="section-h"><span class="bar"></span><h2>{{ grupo.titulo }}</h2></div>
+<div class="tablewrap">
+  <table class="dtable">
+    <thead><tr><th>función</th><th>qué hace</th><th>ejemplo</th></tr></thead>
+    <tbody>
+      {% for f, desc, ej in grupo.filas %}
+      <tr><td><code>{{ f }}</code></td><td>{{ desc }}</td><td><code>{{ ej }}</code></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+
+<div class="exercises">
+  <h3>▸ Atajos de la consola</h3>
+  <ol>
+    <li><b>Ctrl + Enter</b> ejecuta el código del editor.</li>
+    <li><b>cargar excel</b> importa un <code>.xlsx</code>/<code>.csv</code> al data.frame <code>datos</code>.</li>
+    <li><b>exportar excel</b> descarga cualquier data.frame o tabla como Excel.</li>
+    <li>Asignación: <code>&lt;-</code> (ej. <code>m &lt;- mean(x)</code>). Comentarios con <code>#</code>.</li>
+  </ol>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}EstadísticaR{% endblock %} · Terminal Estadístico</title>
+  <meta name="description" content="Aprende estadística y R en el navegador. R real (WebR), carga y exporta Excel, sin instalar nada.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{% static 'core/css/app.css' %}">
+  <!-- SheetJS: lectura/escritura de Excel en el navegador -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<div class="statusbar">
+  <button class="btn menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+  <span class="brand">estadística<b>R</b></span>
+  <span class="sep">·</span>
+  <span style="color:var(--muted)">terminal_estadistico</span>
+  <span class="engine">
+    <span id="engine-dot" class="dot"></span>
+    <span id="engine-status">iniciando…</span>
+  </span>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="tree-title">// apuntes_14256</div>
+    <nav class="tree">
+      <a href="{% url 'home' %}" class="{% if active == 'home' %}on{% endif %}"><span class="num">~</span> inicio</a>
+      {% for c in chapters %}
+      <a href="/cap/{{ c.num|stringformat:'02d' }}/" class="{% if active == c.slug %}on{% endif %}">
+        <span class="num">{{ c.num|stringformat:'02d' }}</span> {{ c.title|lower }}
+      </a>
+      {% endfor %}
+      <div class="grp tree-title">// extra</div>
+      <div class="ext">
+        <a href="{% url 'dataframes:index' %}" class="{% if active == 'dataframes' %}on{% endif %}"><span class="num">DF</span> data frames · minería</a>
+        <a href="{% url 'transformador:index' %}" class="{% if active == 'transformador' %}on{% endif %}"><span class="num">⇄</span> csv → tablas</a>
+      </div>
+      <div class="grp tree-title">// herramientas</div>
+      <a href="{% url 'console' %}" class="{% if active == 'console' %}on{% endif %}"><span class="num">R&gt;</span> consola libre</a>
+      <a href="{% url 'cheatsheet' %}" class="{% if active == 'cheatsheet' %}on{% endif %}"><span class="num">?</span> referencia R</a>
+    </nav>
+  </aside>
+
+  <main class="main {% block mainclass %}{% endblock %}">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+<footer class="foot">
+  EstadísticaR · R real con <a href="https://webr.r-wasm.org/" target="_blank" rel="noopener">WebR</a> (WebAssembly) ·
+  sin servidor, sin base de datos, libre acceso · cátedra 14256 — César Ortiz
+</footer>
+
+<script type="module" src="{% static 'core/js/rengine.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
