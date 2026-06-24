@@ -76,8 +76,10 @@ USE_TZ = True
 
 # --- Archivos estaticos (WhiteNoise) -----------------------------------
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "core" / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles" / "static"
+# No declaramos core/static en STATICFILES_DIRS porque ya se recoge
+# automaticamente desde la app "core". Asi evitamos archivos duplicados.
+STATICFILES_DIRS = []
 
 STORAGES = {
     "staticfiles": {
