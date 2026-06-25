@@ -7,6 +7,8 @@ urlpatterns = [
     path("", core_views.home, name="home"),
     path("consola/", core_views.console, name="console"),
     path("ayuda-r/", core_views.cheatsheet, name="cheatsheet"),
+    path("manifest.json", core_views.manifest, name="manifest"),
+    path("service-worker.js", core_views.service_worker, name="service_worker"),
 
     # 11 capitulos = 11 apps
     path("cap/01/", include("apps.cap01.urls")),

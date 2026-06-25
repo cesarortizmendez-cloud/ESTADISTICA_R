@@ -31,6 +31,28 @@ Lecciones: 1) Conceptos · 2) Tablas de frecuencia (Sturges) · 3) Gráficos · 
 5) Dispersión/asimetría/curtosis · 6) Bivariado y regresión · 7) Probabilidades ·
 8) Condicional y Bayes · 9) V.A. discretas · 10) V.A. continuas · 11) Intervalos de confianza.
 
+
+
+## Instalación como app en Android, Windows e iPhone
+
+El proyecto está preparado como **PWA**. Al abrir `https://estadistica-r.vercel.app/`, la aplicación puede instalarse como ícono en el celular, tablet o computador.
+
+- **Android / Windows / Chrome / Edge:** aparece el botón **“Instalar en mi equipo”** dentro de la aplicación. Al presionarlo, el navegador pide confirmación y crea el ícono.
+- **iPhone / iPad:** iOS no permite abrir automáticamente la ventana de instalación. La aplicación muestra una guía: abrir en Safari, tocar **Compartir** y seleccionar **Agregar a pantalla de inicio**.
+
+Archivos incorporados:
+
+```text
+core/static/core/icons/icon-192.png
+core/static/core/icons/icon-512.png
+core/static/core/icons/icon-maskable-512.png
+core/static/core/icons/apple-touch-icon.png
+core/static/core/icons/favicon-32.png
+core/static/core/js/pwa-install.js
+/manifest.json
+/service-worker.js
+```
+
 ---
 
 ## Desarrollo local (Windows · command prompt)

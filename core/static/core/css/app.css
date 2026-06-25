@@ -267,3 +267,36 @@ footer.foot .credit a:hover{ color:var(--phosphor); }
 }
 
 @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } .cursor{ animation:none; } }
+
+/* ---------- PWA install card ---------- */
+.install-card{
+  position:fixed; right:22px; bottom:22px; z-index:70;
+  display:grid; grid-template-columns:54px 1fr; gap:14px;
+  max-width:430px; padding:14px;
+  background:linear-gradient(180deg,#0f1825,#09111c);
+  border:1px solid var(--line); border-left:3px solid var(--phosphor);
+  border-radius:10px; box-shadow:0 20px 48px rgba(0,0,0,.45), 0 0 18px rgba(0,255,156,.08);
+}
+.install-card[hidden]{ display:none !important; }
+.install-card__icon{
+  width:54px; height:54px; display:grid; place-items:center;
+  border-radius:14px; background:#070d15; border:1px solid rgba(0,255,156,.4);
+  color:var(--phosphor); font-size:32px; font-weight:800; text-shadow:var(--glow) rgba(0,255,156,.55);
+}
+.install-card__title{ color:#eef5fb; font-weight:800; font-size:14px; margin-bottom:2px; }
+.install-card__text{ color:var(--muted); font-family:var(--sans); font-size:13px; line-height:1.45; }
+.install-card__actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.install-card__help{
+  margin-top:10px; padding:10px 12px; border:1px dashed var(--line); border-radius:6px;
+  color:#bac8d6; background:#0b1320; font-family:var(--sans); font-size:12.5px; line-height:1.45;
+}
+@media (max-width:560px){
+  .install-card{
+    left:12px; right:12px; bottom:12px; max-width:none;
+    grid-template-columns:44px 1fr; gap:11px; padding:12px;
+  }
+  .install-card__icon{ width:44px; height:44px; border-radius:12px; font-size:26px; }
+  .install-card__title{ font-size:13px; }
+  .install-card__text{ font-size:12.5px; }
+}
+

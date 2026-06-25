@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Vistas del nucleo: portada, consola libre y hoja de referencia R."""
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.cache import never_cache
 from .curriculum import nav_list, DATAFRAMES
 
 
@@ -98,3 +100,99 @@ def cheatsheet(request):
         "active": "cheatsheet",
         "grupos": CHEATSHEET,
     })
+
+
+def manifest(request):
+    """Manifest PWA para instalar EstadísticaR en Android, Windows e iPhone."""
+    data = {
+        "id": "/",
+        "name": "EstadísticaR · Terminal Estadístico",
+        "short_name": "EstadísticaR",
+        "description": "Aplicación educativa para aprender estadística ejecutando R real en el navegador.",
+        "start_url": "/",
+        "scope": "/",
+        "display": "standalone",
+        "background_color": "#070b11",
+        "theme_color": "#00ff9c",
+        "orientation": "portrait-primary",
+        "lang": "es-CL",
+        "categories": ["education", "productivity"],
+        "icons": [
+            {"src": "/static/core/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+            {"src": "/static/core/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+            {"src": "/static/core/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+        ],
+        "shortcuts": [
+            {"name": "Consola R libre", "short_name": "Consola", "description": "Abrir la consola libre para practicar código R.", "url": "/consola/", "icons": [{"src": "/static/core/icons/icon-192.png", "sizes": "192x192"}]},
+            {"name": "Referencia R", "short_name": "Ayuda R", "description": "Abrir la hoja de referencia rápida de R.", "url": "/ayuda-r/", "icons": [{"src": "/static/core/icons/icon-192.png", "sizes": "192x192"}]}
+        ]
+    }
+    return JsonResponse(data, json_dumps_params={"ensure_ascii": False})
+
+
+@never_cache
+def service_worker(request):
+    """Service worker en la raíz del sitio para habilitar instalación PWA."""
+    content = r'''
+const CACHE_NAME = 'estadistica-r-pwa-v1';
+const APP_SHELL = [
+  '/',
+  '/manifest.json',
+  '/static/core/css/app.css',
+  '/static/core/js/rengine.js',
+  '/static/core/js/pwa-install.js',
+  '/static/core/icons/icon-192.png',
+  '/static/core/icons/icon-512.png',
+  '/static/core/icons/icon-maskable-512.png',
+  '/static/core/icons/apple-touch-icon.png',
+  '/static/core/icons/favicon-32.png'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => Promise.all(APP_SHELL.map((url) => {
+        return fetch(url).then((response) => {
+          if (response.ok) return cache.put(url, response);
+          return null;
+        }).catch(() => null);
+      })))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.map((key) => key === CACHE_NAME ? null : caches.delete(key))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  const request = event.request;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (url.pathname.startsWith('/static/')) {
+    event.respondWith(
+      fetch(request).then((response) => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+        return response;
+      }).catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  if (request.mode === 'navigate') {
+    event.respondWith(fetch(request).catch(() => caches.match('/')));
+  }
+});
+'''.strip()
+    response = HttpResponse(content, content_type="application/javascript; charset=utf-8")
+    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response["Service-Worker-Allowed"] = "/"
+    return response
+
